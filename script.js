@@ -1,12 +1,10 @@
-
 var canvas;
 var score;
 var button;
 var initialInput;
 var submitButton;
 var database;
-  score = 0;
-  
+score = 0;
 
   var config = {
     apiKey: "AIzaSyB4buf1HovVJWmzvKIcDvMnh5dfrifDc-k",
@@ -18,55 +16,41 @@ var database;
   };
   firebase.initializeApp(config);
   database = firebase.database();
- 
-
-  var ref = database.ref('Saturday');
-  var Monday ={
-    workout:["Jumping Jacks", "High knees", "Should press"],
-    goal:"To complete 30 high knees in 15 seconds"
-  }
-  // ref.push(Monday);
-
-
-  //pulling data
   ref.on('value', gotData, err);
 
   function gotData(data) {
     console.log(data.val());
     var scores = data.val();
     var keys = Object.keys(scores);
-
-    
-    //testing conditional statements with the data read from the firebase datastorage.
-    var number=data.val()[keys[0]]["numberPlay"];
-    if (number===12)
-      console.log("The number is the same");
-
-
-    console.log(data.val()[keys[0]]["goal"]);
-    $('#words').append(data.val()[keys[0]]["goal"]);
   }
-
-
-
   function err(err){
     console.log("error!"+err);
   }
-
+// adds new elements to the firebase portal
 $(document).ready(function(){
-  $("#goalButton").click(function(){
-        console.log("HELLO");
+  $("#setButton").click(function(){
         var ref = database.ref('Just added!');
-        var Monday ={
-        workout:["Jumping Jacks", "High knees", "Should press"],
-        goal:"To complete 30 high knees in 15 seconds"
-      }
+        encrypt("password123");
     ref.push(Monday);
   }); 
 }); 
-  
 
-// function send ()
-// {
-  
-// }
+
+encrypt("password123");
+function encrypt(inputtedPassword)
+{
+  var rawPassword=inputtedPassword;
+  var codedPassword;
+  // first letter
+  var asciiNum=rawPassword.charCodeAt(0);
+  var newAscii=asciiNum+3;
+  codedPassword=String.fromCharCode(newAscii);
+  // remaining letters
+  for (var num=1;num<rawPassword.length;num++)
+  {
+    var asciiNum=rawPassword.charCodeAt(num);
+    var newAscii=asciiNum+3;
+    codedPassword=codedPassword+String.fromCharCode(newAscii);
+  }
+  console.log(codedPassword);
+}
